@@ -1,9 +1,21 @@
 import datetime
-import numpy
+import random
+
+import numpy as np
 import time
 
 
-def exercise_one():
+# Command terminal based
+# from IPython import
+
+# Global solution
+# from timeit import default_timer as timer
+import timeit
+
+# Naive mini-project use numpy initialized
+
+
+def exercise_one(random_numbers=1e6):
     """
     Exercise 1.1: "Use of registers"
     Create a vector X of N random numbers, where N is in the order of 1e6 to 1e8 (depending on the speed of your computer).
@@ -15,11 +27,43 @@ def exercise_one():
     Use a diff-function to compute the result thereby exploiting vector computation (wide registers) - in Python this function is "numpy.diff". Remember to include "import numpy".
     Measure the execution time of all implementations and explain the difference in performance.
     """
+
+    # Use a regular for loop and calculate the difference as Y(i) = X(i+1) - X(i), where X and Y are implemented as
+    # python lists.
+    random_numbers = int(random_numbers)
     start_time = time.time()
 
-    end_time = time.time()
-    print("Computation time:",end_time-start_time)
+    x_vectors = []
+    y_vectors = []
 
+    for x in range(random_numbers):
+        x_vectors.append(random.random())
+
+    for y in range(random_numbers-1):
+        y_vectors.append(x_vectors[y+1]-x_vectors[y])
+
+    end_time = time.time()
+    print("[1, Python Lists] Computation time:", end_time-start_time)
+
+    # Extend the above program with intermediate variables (e.g. x_next and x_now) to store the X(i+1)
+    # value for the next iteration.
+    random_numbers = int(random_numbers)
+    start_time = time.time()
+
+    x_vectors = []
+    y_vectors = []
+
+    for x in range(random_numbers):
+        x_vectors.append(random.random())
+
+    x_next = x_vectors[1]
+    for y in range(random_numbers-1):
+        x_now = x_vectors[y]
+        y_vectors.append(x_next-x_now)
+        x_next = x_now
+
+    end_time = time.time()
+    print("[2, Python Lists] Computation time:", end_time-start_time)
 
 
 def exercise_two():
