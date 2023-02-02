@@ -1,6 +1,7 @@
 import datetime
 import random
 
+import numpy
 import numpy as np
 import time
 
@@ -28,10 +29,10 @@ def exercise_one(random_numbers=1e6):
     Measure the execution time of all implementations and explain the difference in performance.
     """
 
-    # Use a regular for loop and calculate the difference as Y(i) = X(i+1) - X(i), where X and Y are implemented as
+    # 1) Use a regular for loop and calculate the difference as Y(i) = X(i+1) - X(i), where X and Y are implemented as
     # python lists.
     random_numbers = int(random_numbers)
-    start_time = time.time()
+    start_time_1 = time.time()
 
     x_vectors = []
     y_vectors = []
@@ -41,14 +42,12 @@ def exercise_one(random_numbers=1e6):
 
     for y in range(random_numbers-1):
         y_vectors.append(x_vectors[y+1]-x_vectors[y])
+    print("[1, Python Lists] Computation time:", time.time()-start_time_1)
 
-    end_time = time.time()
-    print("[1, Python Lists] Computation time:", end_time-start_time)
-
-    # Extend the above program with intermediate variables (e.g. x_next and x_now) to store the X(i+1)
+    # 2) Extend the above program with intermediate variables (e.g. x_next and x_now) to store the X(i+1)
     # value for the next iteration.
     random_numbers = int(random_numbers)
-    start_time = time.time()
+    start_time_2 = time.time()
 
     x_vectors = []
     y_vectors = []
@@ -61,9 +60,46 @@ def exercise_one(random_numbers=1e6):
         x_now = x_vectors[y]
         y_vectors.append(x_next-x_now)
         x_next = x_now
+    print("[2, Python Lists] Computation time:", time.time()-start_time_2)
 
-    end_time = time.time()
-    print("[2, Python Lists] Computation time:", end_time-start_time)
+    # 3) Same as 1, but store X and Y as numpy arrays.
+    start_time_3 = time.time()
+
+    x_vectors = np.random.rand(random_numbers, 1)
+    y_vectors = np.array([])
+
+    for y in range(random_numbers - 1):
+        y_vectors = np.append(y_vectors, x_vectors[y+1]-x_vectors[y])
+    print("[3, Numpy Lists] Computation time:", time.time()-start_time_3)
+
+    # 4) Same as 2, but store X and Y as numpy arrays.
+    start_time_4 = time.time()
+
+    x_vectors = np.random.rand(random_numbers, 1)
+    y_vectors = np.array([])
+
+    x_next = x_vectors[1]
+    for y in range(random_numbers-1):
+        x_now = x_vectors[y]
+        y_vectors = np.append(y_vectors, x_next-x_now)
+        x_next = x_now
+    print("[4, Numpy Lists] Computation time:", time.time()-start_time_4)
+
+    # 5) Use a diff-function to compute the result thereby exploiting vector computation (wide registers) -
+    # in Python this function is "numpy.diff". Remember to include "import numpy".
+    start_time_5 = time.time()
+
+    x_vectors = np.random.rand(random_numbers, 1)
+    y_vectors = np.array([])
+
+    x_next = x_vectors[1]
+    for y in range(random_numbers-1):
+        x_now = x_vectors[y]
+        y_vectors = np.append(y_vectors, numpy.diff(np.array([x_next, x_now])))
+        x_next = x_now
+    print("[5, Numpy Lists, Using Diff] Computation time:", time.time()-start_time_5)
+
+    # Measure the execution time of all implementations and explain the difference in performance.
 
 
 def exercise_two():
