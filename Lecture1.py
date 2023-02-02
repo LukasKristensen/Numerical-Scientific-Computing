@@ -132,22 +132,54 @@ def exercise_two():
         [5, 6]
 
     Explain the relations between the different matrices and how this may be utilized.
+        Fortran order is good for getting the adjacent values since they are stored next to each other in the
+        array as neighbors. This might be good for doing computations between vectors since you would have
+        each vector value beside each other.
+
 
     Part B - practical:
 
-    Generate a random vector X with dimension N x M and another vector Y with opposite dimensions M x N, where N >> M, e.g. N = 100.000, M = 100.
-    Make a program with two functions: one that loops over each row and calculates the row-sum (using numpy.sum()) and one that does the same, but loops over each column.
+    Generate a random vector X with dimension N x M and another vector Y with opposite dimensions M x N, where N >> M,
+    e.g. N = 100.000, M = 100.
+    Make a program with two functions: one that loops over each row and calculates the row-sum (using numpy.sum())
+    and one that does the same, but loops over each column.
     Measure execution speed for each orientation for each for the two vectors.
     Do these results match your expectation given the memory layout difference between Fortran (Matlab) and C (Python)?
     In Python: if this was implemented with a 2D list, you will probably not see a big difference. Why not?
-    Extra info: In Python Numpy you can specify the memory layout for an array explicitly using the keyword order=‘C’ or order=‘F’.
-
+    Extra info: In Python Numpy you can specify the memory layout for an array explicitly using the keyword order=‘C’
+    or order=‘F’.
     """
+
+    x_vector = np.random.rand(100000, 100)
+    y_vector = np.random.rand(100, 100000)
+
+    summed_x = numpy.sum(x_vector)
+    summed_y = numpy.sum(y_vector)
+
+    start_vec_one_row = time.time()
+    for i in range(len(x_vector)):
+        result = x_vector[i]-summed_x
+    print("[2, x, row]",time.time()-start_vec_one_row)
+
+    start_vec_one_column = time.time()
+    for i in range(len(x_vector[0])):
+        result = x_vector[:, i]-summed_x
+    print("[2, x, column]",time.time()-start_vec_one_column)
+
+    start_vec_one_row = time.time()
+    for i in range(len(y_vector)):
+        result = y_vector[i]-summed_y
+    print("[2, y, row]",time.time()-start_vec_one_row)
+
+    start_vec_one_column = time.time()
+    for i in range(len(y_vector[0])):
+        result = y_vector[:, i]-summed_y
+    print("[2, y, column]",time.time()-start_vec_one_column)
 
 
 if __name__ == '__main__':
     print("Loading exercise 1")
     exercise_one()
-    print("Loading exercise 2")
+    print("\nLoading exercise 2")
     exercise_two()
 
