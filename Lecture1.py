@@ -16,7 +16,7 @@ import timeit
 # Naive mini-project use numpy initialized
 
 
-def exercise_one(random_numbers=1e6):
+def exercise_one(random_numbers=1e5):
     """
     Exercise 1.1: "Use of registers"
     Create a vector X of N random numbers, where N is in the order of 1e6 to 1e8 (depending on the speed of your computer).
@@ -78,10 +78,11 @@ def exercise_one(random_numbers=1e6):
     x_vectors = np.random.rand(random_numbers, 1)
     y_vectors = np.array([])
 
+    x_now = x_vectors[0]
     x_next = x_vectors[1]
-    for y in range(random_numbers-1):
-        x_now = x_vectors[y]
+    for y in range(1, random_numbers-1):
         y_vectors = np.append(y_vectors, x_next-x_now)
+        x_now = x_vectors[y+1]
         x_next = x_now
     print("[4, Numpy Lists] Computation time:", time.time()-start_time_4)
 
@@ -92,14 +93,20 @@ def exercise_one(random_numbers=1e6):
     x_vectors = np.random.rand(random_numbers, 1)
     y_vectors = np.array([])
 
+    x_now = x_vectors[0]
     x_next = x_vectors[1]
-    for y in range(random_numbers-1):
-        x_now = x_vectors[y]
+    for y in range(1, random_numbers-1):
         y_vectors = np.append(y_vectors, numpy.diff(np.array([x_next, x_now])))
+        x_now = x_vectors[y]
         x_next = x_now
+
     print("[5, Numpy Lists, Using Diff] Computation time:", time.time()-start_time_5)
 
     # Measure the execution time of all implementations and explain the difference in performance.
+    """
+        Numpy is re-allocating the memory everytime new data is appended
+        Normal lists are over-allocating new data into the memory
+    """
 
 
 def exercise_two():
@@ -110,9 +117,20 @@ def exercise_two():
     We have 6 elements stored contiguous in memory in the order: 1, 2, 3, 4, 5, 6.  In the following, we read this contiguous data into arrays in different ways.  What do the arrays look like if we read the data as:
 
     a 2x3 matrix treating data as column-major (Fortran style) as F2x3?
+        [1, 3, 5]
+        [2, 4, 6]
     a 3x2 matrix treating data as column-major (Fortran style) as F3x2?
+        [1, 4]
+        [2, 5]
+        [3, 6]
     a 2x3 matrix treating data as row-major (C style) as C2x3?
+        [1, 2, 3]
+        [4, 5, 6]
     a 3x2 matrix treating data as row-major (C style) as C3x2?
+        [1, 2]
+        [3, 4]
+        [5, 6]
+
     Explain the relations between the different matrices and how this may be utilized.
 
     Part B - practical:
