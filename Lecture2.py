@@ -4,6 +4,7 @@ import numba
 import numpy
 
 
+@numba.jit(nopython=True)
 def no_roll(N, a, b):
     i = 0
     sum1 = 0
@@ -11,7 +12,7 @@ def no_roll(N, a, b):
         sum1 += a[i]**b[i]
         i += 1
 
-
+@numba.jit(nopython=True)
 def two_roll(N, a, b):
     i = 0
     sum1, sum2 = 0, 0
@@ -21,7 +22,7 @@ def two_roll(N, a, b):
         i += 1
     sum = sum1 + sum2
 
-
+@numba.jit(nopython=True)
 def four_roll(N, a, b):
     i = 0
     sum1, sum2, sum3, sum4 = 0, 0, 0, 0
@@ -33,7 +34,7 @@ def four_roll(N, a, b):
         i += 1
     sum = sum1 + sum2 + sum3 + sum4
 
-
+@numba.jit(nopython=True)
 def eight_roll(N, a, b):
     i = 0
     sum1, sum2, sum3, sum4, sum5, sum6, sum7, sum8 = 0, 0, 0, 0, 0, 0, 0, 0
@@ -79,27 +80,36 @@ def exercise_two_one():
     eight_roll(N, a, b)
     print("(2.1) [Eight Roll] Computation time:", time.time()-start_time)
 
+
+def exercise_two_two():
+    """
+    Exercise 2.2: "Cache blocking"
+    -   Implement the example in the top of section 1.7.4 (p. 55) in Python. Use while loop instead of for loop. Also,
+        use Numba to compile your Python function for highest performance. Interpreted Python is too slow to reveal the
+        difference in cache latency.
+    -   Increase the l1size parameter, measure the execution time and calculate the time per operation. At some point,
+        when exceeding the L1 cache size (often 32 KB), the time per operation should increase.
+    -   Extend the code to use the cache blocking principle and verify that the time per operation goes down.
+    """
+
+
+    pass
+
+
+if __name__ == '__main__':
+    exercise_two_one()
     """
     Results without numba:
         (2.1) [No Roll] Computation time: 0.37106776237487793
         (2.1) [Two Roll] Computation time: 0.4389922618865967
         (2.1) [Four Roll] Computation time: 0.38599610328674316
         (2.1) [Eight Roll] Computation time: 0.38300108909606934
+    
+    Results with numba:
+        (2.1) [No Roll] Computation time: 0.2523345947265625
+        (2.1) [Two Roll] Computation time: 0.0891878604888916
+        (2.1) [Four Roll] Computation time: 0.1430213451385498
+        (2.1) [Eight Roll] Computation time: 0.209991455078125
     """
 
-
-def exercise_two_two():
-    """
-    Exercise 2.2: "Cache blocking"
-    Implement the example in the 4th-6th line of section 1.7.3 (p. 55) in Python. Use while loop instead of for loop.
-    Also, use Numba to compile your Python function for highest performance. Interpreted Python is too slow to reveal
-    the difference in cache latency.
-    Increase the size parameter, measure the execution time and calculate the time per operation. At some point, when
-    exceeding the L1 cache size (often 32 KB), the time per operation should increase.
-    Extend the code to use the cache blocking principle and verify that the time per operation goes down.
-    """
-    pass
-
-
-if __name__ == '__main__':
-    exercise_two_one()
+    exercise_two_two()
