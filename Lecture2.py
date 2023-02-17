@@ -12,6 +12,7 @@ def no_roll(N, a, b):
         sum1 += a[i]**b[i]
         i += 1
 
+
 @numba.jit(nopython=True)
 def two_roll(N, a, b):
     i = 0
@@ -21,6 +22,7 @@ def two_roll(N, a, b):
         sum2 += a[2*i+1]**b[2*i+1]
         i += 1
     sum = sum1 + sum2
+
 
 @numba.jit(nopython=True)
 def four_roll(N, a, b):
@@ -33,6 +35,7 @@ def four_roll(N, a, b):
         sum4 += a[4*i+3]**b[4*i+3]
         i += 1
     sum = sum1 + sum2 + sum3 + sum4
+
 
 @numba.jit(nopython=True)
 def eight_roll(N, a, b):
@@ -92,6 +95,15 @@ def exercise_two_two():
     -   Extend the code to use the cache blocking principle and verify that the time per operation goes down.
     """
 
+    NRUNS = 100
+    size = 100
+    i, j = 0, 0
+
+    while i < NRUNS:
+        while j < size:
+
+            j += 1
+        i += 1
 
     pass
 
@@ -113,3 +125,4 @@ if __name__ == '__main__':
     """
 
     exercise_two_two()
+
